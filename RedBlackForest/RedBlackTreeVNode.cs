@@ -16,7 +16,7 @@ namespace RedBlackForest
 
         public override string ToString()
         {
-            return String.Format("[{1}]", Value);
+            return String.Format("[{0}]", Value);
         }
     }
 }

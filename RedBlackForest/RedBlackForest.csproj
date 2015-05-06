@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{B64BE780-3FE6-4792-B336-8FBBEA88048E}</ProjectGuid>
+    <ProjectGuid>{F8DB7A32-79AC-4B3F-94A3-1B32F16E70EE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>RedBlackForest</RootNamespace>
     <AssemblyName>RedBlackForest</AssemblyName>
@@ -38,6 +38,7 @@
     <Compile Include="RedBlackTreeV.StaticMethods.cs" />
     <Compile Include="RedBlackTreeVNode.cs" />
     <Compile Include="RedBlackTreeKVNode.cs" />
+    <Compile Include="Pair.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
