@@ -33,10 +33,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedBlackTreeKV.cs" />
-    <Compile Include="RedBlackTreeV.cs" />
     <Compile Include="RedBlackTreeKV.StaticMethods.cs" />
-    <Compile Include="RedBlackTreeV.StaticMethods.cs" />
-    <Compile Include="RedBlackTreeVNode.cs" />
     <Compile Include="RedBlackTreeKVNode.cs" />
     <Compile Include="Pair.cs" />
   </ItemGroup>

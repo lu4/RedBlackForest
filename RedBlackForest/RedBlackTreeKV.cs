@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections;
 
 namespace RedBlackForest
@@ -26,10 +25,10 @@ namespace RedBlackForest
         {
             if (null == comparer)
             {
-                throw new ArgumentNullException("keyComparison");
+                throw new ArgumentNullException("comparer");
             }
 
-            this.Comparer = comparer;
+            Comparer = comparer;
         }
 
         public RedBlackTree()
@@ -82,7 +81,7 @@ namespace RedBlackForest
         /// <returns>True if key/value present and removed.</returns>
         public Boolean Remove(TKey key)
         {
-            Int32 initialCount = Count;
+            var initialCount = Count;
 
             if (null != rootNode)
             {
@@ -148,17 +147,17 @@ namespace RedBlackForest
         /// <summary>
         /// Gets the (first) node corresponding to the specified key.
         /// </summary>
-        /// <param name="key">Key to search for.</param>
+        /// <param name="key">Key to search for</param>
         /// <returns>Corresponding node or null if none found.</returns>
         public RedBlackTreeNode<TKey, TValue> FindNode(TKey key)
         {
             // Initialize
-            RedBlackTreeNode<TKey, TValue> node = rootNode;
+            var node = rootNode;
 
             while (null != node)
             {
                 // Compare keys and go left/right
-                Int32 comparisonResult = Comparer.Compare(key, node.Key);
+                var comparisonResult = Comparer.Compare(key, node.Key);
 
                 if (comparisonResult < 0)
                 {
@@ -200,7 +199,7 @@ namespace RedBlackForest
 
         public Boolean ContainsKey(TKey key)
         {
-            RedBlackTreeNode<TKey, TValue> node = FindNode(key);
+            var node = FindNode(key);
 
             return node != null;
         }
@@ -214,16 +213,14 @@ namespace RedBlackForest
         {
             get
             {
-                RedBlackTreeNode<TKey, TValue> node = FindNode(key);
+                var node = FindNode(key);
 
                 if (null != node)
                 {
                     return node.Value;
                 }
-                else
-                {
-                    throw new KeyNotFoundException();
-                }
+
+                throw new KeyNotFoundException();
             }
             set
             {
@@ -766,7 +763,7 @@ namespace RedBlackForest
             }
 
             // Find right place for new node
-            Int32 comparisonResult = Comparer.Compare(key, node.Key);
+            var comparisonResult = Comparer.Compare(key, node.Key);
 
             if (comparisonResult < 0)
             {
@@ -906,7 +903,8 @@ namespace RedBlackForest
                         Count--;
 
                         // Find the smallest node on the right, swap, and remove it
-                        RedBlackTreeNode<TKey, TValue> m = GetMinimumNode(node.Right);
+                        var m = GetMinimumNode(node.Right);
+
                         node.Key = m.Key;
                         node.Value = m.Value;
                         node.Right = DeleteMinimum(node.Right);
@@ -932,7 +930,9 @@ namespace RedBlackForest
         {
             // Create a stack to avoid recursion
             var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
-            RedBlackTreeNode<TKey, TValue> current = node;
+
+            var current = node;
+
             while (current != null)
             {
                 if (current.Left != null)
@@ -959,7 +959,7 @@ namespace RedBlackForest
 
             while (node != null)
             {
-                Int32 comparison = Comparer.Compare(minimum, node.Key);
+                var comparison = Comparer.Compare(minimum, node.Key);
 
                 if (comparison <= 0)
                 {
@@ -970,7 +970,7 @@ namespace RedBlackForest
                     }
                     else
                     {
-                        Boolean @break = false;
+                        var @break = false;
 
                         while (true)
                         {
