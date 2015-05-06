@@ -1090,6 +1090,17 @@ namespace RedBlackForest
             return Traverse(rootNode).GetEnumerator();
         }
 
+        public RedBlackTreeNode<TKey, TValue> AddOrSet(TKey key, TValue value)
+        {
+            RedBlackTreeNode<TKey, TValue> result;
+
+            rootNode = AddOrGet(rootNode, key, value, out result);
+            rootNode.IsBlack = true;
+
+            result.Value = value;
+
+            return result;
+        }
         public RedBlackTreeNode<TKey, TValue> AddOrGet(TKey key, TValue value)
         {
             RedBlackTreeNode<TKey, TValue> result;
