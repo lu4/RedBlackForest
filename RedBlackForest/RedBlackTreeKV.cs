@@ -178,25 +178,6 @@ namespace RedBlackForest
             return null;
         }
 
-        public TKey FindKey(TKey key)
-        {
-            var node = FindNode(key);
-
-            return node == null ? default(TKey) : node.Key;
-        }
-        public TValue FindValue(TKey key)
-        {
-            var node = FindNode(key);
-
-            return node == null ? default(TValue) : node.Value;
-        }
-        public KeyValuePair<TKey, TValue> FindPair(TKey key)
-        {
-            var node = FindNode(key);
-
-            return node == null ? default(KeyValuePair<TKey, TValue>) : node.Pair;
-        }
-
         public Boolean ContainsKey(TKey key)
         {
             var node = FindNode(key);
@@ -227,6 +208,54 @@ namespace RedBlackForest
                 rootNode = Set(rootNode, key, value);
                 rootNode.IsBlack = true;
             }
+        }
+
+        public TValue TryGetValue(TKey key)
+        {
+            var node = FindNode(key);
+
+            if (null != node)
+            {
+                return node.Value;
+            }
+
+            return default(TValue);
+        }
+        public TValue TryGetValue(TKey key, TValue defaultValue)
+        {
+            var node = FindNode(key);
+
+            if (null != node)
+            {
+                return node.Value;
+            }
+
+            return defaultValue;
+        }
+        public TValue TryGetValue(TKey key, Func<TValue> defaultValue)
+        {
+            var node = FindNode(key);
+
+            if (null != node)
+            {
+                return node.Value;
+            }
+
+            return defaultValue();
+        }
+        public Boolean TryGetValue(TKey key, out TValue value)
+        {
+            var node = FindNode(key);
+
+            if (null != node)
+            {
+                value = node.Value;
+
+                return true;
+            }
+
+            value = default(TValue);
+            return false;
         }
 
         public TKey NextKey(TKey key)
@@ -642,7 +671,6 @@ namespace RedBlackForest
         {
             return Traverse(rootNode).GetEnumerator();
         }
-
         public IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateDescendingNodes(TKey key)
         {
             var nearest = NearestNodes(key);
