@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace RedBlackForest
 {
-    internal class RedBlackTreeNode<TKey, TValue>
+    public class RedBlackTreeNode<TKey, TValue>
     {
         public TKey Key { get; internal set; }
         public TValue Value { get; internal set; }

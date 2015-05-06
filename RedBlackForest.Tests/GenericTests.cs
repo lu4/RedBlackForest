@@ -17,14 +17,14 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String> { { 0, "Zero" }, { 1, "One" } };
 
-            var result1 = tree.TryGetOrAdd(2, "Two");
+            var result1 = tree.TryGetOrAddValue(2, "Two");
             var result2 = tree[2];
 
             Assert.That(result1, Is.EqualTo("Two"));
             Assert.That(result2, Is.EqualTo("Two"));
 
-            var result3 = tree.TryGetOrAdd(3, () => "Three");
-            var result4 = tree.TryGetOrAdd(3, () => "Four");
+            var result3 = tree.TryGetOrAddValue(3, () => "Three");
+            var result4 = tree.TryGetOrAddValue(3, () => "Four");
             var result5 = tree[3];
 
             Assert.That(result3, Is.EqualTo("Three"));
@@ -38,7 +38,7 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String> { { 0, "Zero" }, { 1, "One" } };
 
-            var result1 = tree.TryGetOrAdd(0, "Two");
+            var result1 = tree.TryGetOrAddValue(0, "Two");
 
             var result2 = tree[0];
 
@@ -51,19 +51,19 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String>();
 
-            var resultZ = tree.NearestPairs(5);
+            var resultZ = tree.NearestNodes(5);
 
             tree.Add(2, "Two");
             tree.Add(5, "Five");
             tree.Add(8, "Eight");
 
-            var result0 = tree.NearestPairs(0);
-            var result2 = tree.NearestPairs(2);
-            var result3 = tree.NearestPairs(3);
-            var result5 = tree.NearestPairs(5);
-            var result6 = tree.NearestPairs(6);
-            var result8 = tree.NearestPairs(8);
-            var result9 = tree.NearestPairs(9);
+            var result0 = tree.NearestNodes(0);
+            var result2 = tree.NearestNodes(2);
+            var result3 = tree.NearestNodes(3);
+            var result5 = tree.NearestNodes(5);
+            var result6 = tree.NearestNodes(6);
+            var result8 = tree.NearestNodes(8);
+            var result9 = tree.NearestNodes(9);
 
             Assert.That(resultZ.A, Is.Null);
             Assert.That(resultZ.B, Is.Null);

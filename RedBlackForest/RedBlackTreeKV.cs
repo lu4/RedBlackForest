@@ -137,7 +137,7 @@ namespace RedBlackForest
             }
         }
 
-        private RedBlackTreeNode<TKey, TValue> FindNode(TKey key)
+        public RedBlackTreeNode<TKey, TValue> FindNode(TKey key)
         {
             // Initialize
             var node = rootNode;
@@ -270,7 +270,7 @@ namespace RedBlackForest
             return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
         }
 
-        private RedBlackTreeNode<TKey, TValue> NextNode(TKey key)
+        public RedBlackTreeNode<TKey, TValue> NextNode(TKey key)
         {
             return SiblingNodes(key).B;
         }
@@ -296,7 +296,7 @@ namespace RedBlackForest
             return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
         }
 
-        private RedBlackTreeNode<TKey, TValue> PreviousNode(TKey key)
+        public RedBlackTreeNode<TKey, TValue> PreviousNode(TKey key)
         {
             return SiblingNodes(key).A;
         }
@@ -334,7 +334,7 @@ namespace RedBlackForest
             );
         }
 
-        private Pair<RedBlackTreeNode<TKey, TValue>> SiblingNodes(TKey key)
+        public Pair<RedBlackTreeNode<TKey, TValue>> SiblingNodes(TKey key)
         {
             if (IsEmpty)
                 return default(Pair<RedBlackTreeNode<TKey, TValue>>);
@@ -477,13 +477,13 @@ namespace RedBlackForest
             var nodes = NearestNodes(key);
 
             return new Pair<KeyValuePair<TKey, TValue>>
-                (
+            (
                 nodes.A == null ? default(KeyValuePair<TKey, TValue>) : nodes.A.KeyValuePair,
                 nodes.B == null ? default(KeyValuePair<TKey, TValue>) : nodes.B.KeyValuePair
-                );
+            );
         }
 
-        private Pair<RedBlackTreeNode<TKey, TValue>> NearestNodes(TKey key)
+        public Pair<RedBlackTreeNode<TKey, TValue>> NearestNodes(TKey key)
         {
             if (IsEmpty)
                 return default(Pair<RedBlackTreeNode<TKey, TValue>>);
@@ -612,7 +612,7 @@ namespace RedBlackForest
             if (node != null) Remove(node.Key);
         }
 
-        private RedBlackTreeNode<TKey, TValue> RemoveMinimumNode()
+        public RedBlackTreeNode<TKey, TValue> RemoveMinimumNode()
         {
             var node = GetMinimumNode(rootNode);
 
@@ -621,7 +621,7 @@ namespace RedBlackForest
             return node;
         }
 
-        private RedBlackTreeNode<TKey, TValue> RemoveMaximumNode()
+        public RedBlackTreeNode<TKey, TValue> RemoveMaximumNode()
         {
             var node = GetMaximumNode(rootNode);
 
