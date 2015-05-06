@@ -175,7 +175,7 @@ namespace RedBlackForest
         }
         public RedBlackTreeNode<Value> NextNode(Value value)
         {
-            return SiblingNodes(value).B;
+            return SiblingNodes(value).Value2;
         }
 
         public Value Previous(Value value)
@@ -186,17 +186,17 @@ namespace RedBlackForest
         }
         public RedBlackTreeNode<Value> PreviousNode(Value value)
         {
-            return SiblingNodes(value).A;
+            return SiblingNodes(value).Value1;
         }
 
-        public Tuple<Value> Sibling(Value value)
+        public Tuple<Value, Value> Sibling(Value value)
         {
             var nodes = SiblingNodes(value);
 
-            return new Tuple<Value>
+            return new Tuple<Value, Value>
             (
-                nodes.A == null ? default(Value) : nodes.A.Value,
-                nodes.B == null ? default(Value) : nodes.B.Value
+                nodes.Value1 == null ? default(Value) : nodes.Value1.Value,
+                nodes.Value2 == null ? default(Value) : nodes.Value2.Value
             );
         }
         public Tuple<RedBlackTreeNode<Value>> SiblingNodes(Value value)
@@ -338,14 +338,14 @@ namespace RedBlackForest
             }
         }
 
-        public Tuple<Value> Nearest(Value value)
+        public Tuple<Value, Value> Nearest(Value value)
         {
             var nodes = NearestNodes(value);
 
-            return new Tuple<Value>
+            return new Tuple<Value, Value>
             (
-                nodes.A == null ? default(Value) : nodes.A.Value,
-                nodes.B == null ? default(Value) : nodes.B.Value
+                nodes.Value1 == null ? default(Value) : nodes.Value1.Value,
+                nodes.Value2 == null ? default(Value) : nodes.Value2.Value
             );
         }
         public Tuple<RedBlackTreeNode<Value>> NearestNodes(Value value)
@@ -500,8 +500,8 @@ namespace RedBlackForest
         {
             var nearest = NearestNodes(value);
 
-            var prev = nearest.A;
-            var next = nearest.B;
+            var prev = nearest.Value1;
+            var next = nearest.Value2;
 
             if (prev != null)
             {

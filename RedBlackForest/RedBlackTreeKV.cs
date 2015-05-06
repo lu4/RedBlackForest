@@ -263,7 +263,7 @@ namespace RedBlackForest
         }
         public RedBlackTreeNode<Key, Value> NextNode(Key key)
         {
-            return SiblingNodes(key).B;
+            return SiblingNodes(key).Value2;
         }
 
         public Key PreviousKey(Key key)
@@ -286,43 +286,43 @@ namespace RedBlackForest
         }
         public RedBlackTreeNode<Key, Value> PreviousNode(Key key)
         {
-            return SiblingNodes(key).A;
+            return SiblingNodes(key).Value1;
         }
 
-        public Tuple<Key> SiblingKeys(Key key)
+        public Tuple<Key, Key> SiblingKeys(Key key)
         {
             var nodes = SiblingNodes(key);
 
-            return new Tuple<Key>
+            return new Tuple<Key, Key>
             (
-                nodes.A == null ? default(Key) : nodes.A.Key,
-                nodes.B == null ? default(Key) : nodes.B.Key
+                nodes.Value1 == null ? default(Key) : nodes.Value1.Key,
+                nodes.Value2 == null ? default(Key) : nodes.Value2.Key
             );
         }
-        public Tuple<Value> SiblingValues(Key key)
+        public Tuple<Value, Value> SiblingValues(Key key)
         {
             var nodes = SiblingNodes(key);
 
-            return new Tuple<Value>
+            return new Tuple<Value, Value>
             (
-                nodes.A == null ? default(Value) : nodes.A.Value,
-                nodes.B == null ? default(Value) : nodes.B.Value
+                nodes.Value1 == null ? default(Value) : nodes.Value1.Value,
+                nodes.Value2 == null ? default(Value) : nodes.Value2.Value
             );
         }
-        public Tuple<KeyValuePair<Key, Value>> SiblingPairs(Key key)
+        public Tuple<KeyValuePair<Key, Value>, KeyValuePair<Key, Value>> SiblingPairs(Key key)
         {
             var nodes = SiblingNodes(key);
 
-            return new Tuple<KeyValuePair<Key, Value>>
+            return new Tuple<KeyValuePair<Key, Value>, KeyValuePair<Key, Value>>
             (
-                nodes.A == null ? default(KeyValuePair<Key, Value>) : nodes.A.Pair,
-                nodes.B == null ? default(KeyValuePair<Key, Value>) : nodes.B.Pair
+                nodes.Value1 == null ? default(KeyValuePair<Key, Value>) : nodes.Value1.Pair,
+                nodes.Value2 == null ? default(KeyValuePair<Key, Value>) : nodes.Value2.Pair
             );
         }
-        public Tuple<RedBlackTreeNode<Key, Value>> SiblingNodes(Key key)
+        public Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>> SiblingNodes(Key key)
         {
             if (IsEmpty)
-                return default(Tuple<RedBlackTreeNode<Key, Value>>);
+                return default(Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>);
 
             var leftmost = true;
             var rightmost = true;
@@ -351,21 +351,21 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Key, nodeB.Key) < 0 || (Comparer.Compare(nodeA.Key, nodeC.Key) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
                         }
                     }
                 }
@@ -383,21 +383,21 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Key, nodeB.Key) < 0 || (Comparer.Compare(nodeA.Key, nodeC.Key) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
                         }
                     }
                 }
@@ -417,19 +417,19 @@ namespace RedBlackForest
                     {
                         if (nodeA.Right != null)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(GetMaximumNode(nodeA.Left), GetMinimumNode(nodeA.Right));
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(GetMaximumNode(nodeA.Left), GetMinimumNode(nodeA.Right));
                         }
                         else
                         {
                             if (Comparer.Compare(nodeA.Key, nodeB.Key) < 0 || Comparer.Compare(nodeA.Key, nodeC.Key) < 0)
                             // A < B
                             {
-                                return new Tuple<RedBlackTreeNode<Key, Value>>(GetMaximumNode(nodeA.Left), nodeC);
+                                return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(GetMaximumNode(nodeA.Left), nodeC);
                             }
                             else
                             // B < A
                             {
-                                return new Tuple<RedBlackTreeNode<Key, Value>>(GetMaximumNode(nodeA.Left), null);
+                                return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(GetMaximumNode(nodeA.Left), null);
                             }
                         }
                     }
@@ -437,19 +437,19 @@ namespace RedBlackForest
                     {
                         if (leftmost && rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(null, null);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(null, null);
                         }
                         else if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(null, nodeC);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(null, nodeC);
                         }
                         else if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeB, null);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeB, null);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeB, nodeC);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeB, nodeC);
                         }
                     }
                 }
@@ -458,40 +458,40 @@ namespace RedBlackForest
             }
         }
 
-        public Tuple<Key> NearestKeys(Key key)
+        public Tuple<Key, Key> NearestKeys(Key key)
         {
             var nodes = NearestNodes(key);
 
-            return new Tuple<Key>
+            return new Tuple<Key, Key>
             (
-                nodes.A == null ? default(Key) : nodes.A.Key,
-                nodes.B == null ? default(Key) : nodes.B.Key
+                nodes.Value1 == null ? default(Key) : nodes.Value1.Key,
+                nodes.Value2 == null ? default(Key) : nodes.Value2.Key
             );
         }
-        public Tuple<Value> NearestValues(Key key)
+        public Tuple<Value, Value> NearestValues(Key key)
         {
             var nodes = NearestNodes(key);
 
-            return new Tuple<Value>
+            return new Tuple<Value, Value>
             (
-                nodes.A == null ? default(Value) : nodes.A.Value,
-                nodes.B == null ? default(Value) : nodes.B.Value
+                nodes.Value1 == null ? default(Value) : nodes.Value1.Value,
+                nodes.Value2 == null ? default(Value) : nodes.Value2.Value
             );
         }
-        public Tuple<KeyValuePair<Key, Value>> NearestPairs(Key key)
+        public Tuple<KeyValuePair<Key, Value>, KeyValuePair<Key, Value>> NearestPairs(Key key)
         {
             var nodes = NearestNodes(key);
 
-            return new Tuple<KeyValuePair<Key, Value>>
+            return new Tuple<KeyValuePair<Key, Value>, KeyValuePair<Key, Value>>
             (
-                nodes.A == null ? default(KeyValuePair<Key, Value>) : nodes.A.Pair,
-                nodes.B == null ? default(KeyValuePair<Key, Value>) : nodes.B.Pair
+                nodes.Value1 == null ? default(KeyValuePair<Key, Value>) : nodes.Value1.Pair,
+                nodes.Value2 == null ? default(KeyValuePair<Key, Value>) : nodes.Value2.Pair
             );
         }
-        public Tuple<RedBlackTreeNode<Key, Value>> NearestNodes(Key key)
+        public Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>> NearestNodes(Key key)
         {
             if (IsEmpty)
-                return default(Tuple<RedBlackTreeNode<Key, Value>>);
+                return default(Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>);
 
             var leftmost = true;
             var rightmost = true;
@@ -520,21 +520,21 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Key, nodeB.Key) < 0 || (Comparer.Compare(nodeA.Key, nodeC.Key) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
                         }
                     }
                 }
@@ -552,27 +552,27 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Key, nodeB.Key) < 0 || (Comparer.Compare(nodeA.Key, nodeC.Key) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeB, nodeA);
                         }
                     }
                 }
                 else
                 {
-                    return new Tuple<RedBlackTreeNode<Key, Value>>(nodeA, nodeA);
+                    return new Tuple<RedBlackTreeNode<Key, Value>, RedBlackTreeNode<Key, Value>>(nodeA, nodeA);
                 }
 
                 comparisonA = Comparer.Compare(key, nodeA.Key);
@@ -707,8 +707,8 @@ namespace RedBlackForest
         {
             var nearest = NearestNodes(key);
 
-            var prev = nearest.A;
-            var next = nearest.B;
+            var prev = nearest.Value1;
+            var next = nearest.Value2;
 
             if (prev != null)
             {
