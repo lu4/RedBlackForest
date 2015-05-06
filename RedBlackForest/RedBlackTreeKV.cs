@@ -1112,7 +1112,7 @@ namespace RedBlackForest
         {
             RedBlackTreeNode<TKey, TValue> result;
 
-            rootNode = TryGetOrAdd(rootNode, key, value, out result);
+            rootNode = TryGetOrAddValue(rootNode, key, value, out result);
             rootNode.IsBlack = true;
 
             result.Value = value;
@@ -1120,18 +1120,17 @@ namespace RedBlackForest
             return result.Value;
         }
 
-        public TValue TryGetOrAdd(TKey key, TValue value)
+        public TValue TryGetOrAddValue(TKey key, TValue value)
         {
             RedBlackTreeNode<TKey, TValue> result;
 
-            rootNode = TryGetOrAdd(rootNode, key, value, out result);
+            rootNode = TryGetOrAddValue(rootNode, key, value, out result);
             rootNode.IsBlack = true;
 
             return result.Value;
         }
 
-        private RedBlackTreeNode<TKey, TValue> TryGetOrAdd(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value,
-            out RedBlackTreeNode<TKey, TValue> result)
+        private RedBlackTreeNode<TKey, TValue> TryGetOrAddValue(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value, out RedBlackTreeNode<TKey, TValue> result)
         {
             if (node == null)
             {
@@ -1152,11 +1151,11 @@ namespace RedBlackForest
 
             if (comparisonResult < 0)
             {
-                node.Left = TryGetOrAdd(node.Left, key, value, out result);
+                node.Left = TryGetOrAddValue(node.Left, key, value, out result);
             }
             else if (0 < comparisonResult)
             {
-                node.Right = TryGetOrAdd(node.Right, key, value, out result);
+                node.Right = TryGetOrAddValue(node.Right, key, value, out result);
             }
             else
             {
@@ -1178,17 +1177,17 @@ namespace RedBlackForest
             return node;
         }
 
-        public TValue TryGetOrAdd(TKey key, Func<TValue> value)
+        public TValue TryGetOrAddValue(TKey key, Func<TValue> value)
         {
             RedBlackTreeNode<TKey, TValue> result;
 
-            rootNode = TryGetOrAdd(rootNode, key, value, out result);
+            rootNode = TryGetOrAddValue(rootNode, key, value, out result);
             rootNode.IsBlack = true;
 
             return result.Value;
         }
 
-        private RedBlackTreeNode<TKey, TValue> TryGetOrAdd(RedBlackTreeNode<TKey, TValue> node, TKey key,
+        private RedBlackTreeNode<TKey, TValue> TryGetOrAddValue(RedBlackTreeNode<TKey, TValue> node, TKey key,
             Func<TValue> value, out RedBlackTreeNode<TKey, TValue> result)
         {
             if (node == null)
@@ -1210,11 +1209,11 @@ namespace RedBlackForest
 
             if (comparisonResult < 0)
             {
-                node.Left = TryGetOrAdd(node.Left, key, value, out result);
+                node.Left = TryGetOrAddValue(node.Left, key, value, out result);
             }
             else if (0 < comparisonResult)
             {
-                node.Right = TryGetOrAdd(node.Right, key, value, out result);
+                node.Right = TryGetOrAddValue(node.Right, key, value, out result);
             }
             else
             {
