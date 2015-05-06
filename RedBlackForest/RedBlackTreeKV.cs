@@ -1134,9 +1134,7 @@ namespace RedBlackForest
                 // Insert new node
                 Count++;
 
-                result = null;
-
-                return new RedBlackTreeNode<TKey, TValue> { Key = key, Value = value() };
+                return result = new RedBlackTreeNode<TKey, TValue> { Key = key, Value = value() };
             }
 
             if (IsRed(node.Left) && IsRed(node.Right))
