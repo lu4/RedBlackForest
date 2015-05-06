@@ -21,18 +21,18 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String> { { 0, "Zero" }, { 1, "One" } };
 
-            var result1 = tree.AddOrGet(2, "Two");
+            var result1 = tree.GetOrAdd(2, "Two");
             var result2 = tree[2];
 
-            Assert.That(result1.Value, Is.EqualTo("Two"));
+            Assert.That(result1, Is.EqualTo("Two"));
             Assert.That(result2, Is.EqualTo("Two"));
 
-            var result3 = tree.AddOrGet(3, () => "Three");
-            var result4 = tree.AddOrGet(3, () => "Four");
+            var result3 = tree.GetOrAdd(3, () => "Three");
+            var result4 = tree.GetOrAdd(3, () => "Four");
             var result5 = tree[3];
 
-            Assert.That(result3.Value, Is.EqualTo("Three"));
-            Assert.That(result4.Value, Is.EqualTo("Three"));
+            Assert.That(result3, Is.EqualTo("Three"));
+            Assert.That(result4, Is.EqualTo("Three"));
             Assert.That(result5, Is.EqualTo("Three"));
         }
 
@@ -42,11 +42,11 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String> { { 0, "Zero" }, { 1, "One" } };
 
-            var result1 = tree.AddOrGet(0, "Two");
+            var result1 = tree.GetOrAdd(0, "Two");
 
             var result2 = tree[0];
 
-            Assert.That(result1.Value, Is.EqualTo("Zero"));
+            Assert.That(result1, Is.EqualTo("Zero"));
             Assert.That(result2, Is.EqualTo("Zero"));
         }
 
