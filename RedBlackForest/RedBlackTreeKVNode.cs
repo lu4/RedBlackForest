@@ -5,21 +5,21 @@ using System.Collections.Generic;
 
 namespace RedBlackForest
 {
-    public class RedBlackTreeNode<K, V>
+    public class RedBlackTreeNode<TKey, TValue>
     {
-        public K Key { get; internal set; }
-        public V Value { get; internal set; }
+        public TKey Key { get; internal set; }
+        public TValue Value { get; internal set; }
 
         internal Boolean IsBlack { get; set; }
 
-        internal RedBlackTreeNode<K, V> Left { get; set; }
-        internal RedBlackTreeNode<K, V> Right { get; set; }
+        internal RedBlackTreeNode<TKey, TValue> Left { get; set; }
+        internal RedBlackTreeNode<TKey, TValue> Right { get; set; }
 
-        public KeyValuePair<K, V> Pair
+        public KeyValuePair<TKey, TValue> Pair
         {
             get
             {
-                return new KeyValuePair<K, V>(Key, Value);
+                return new KeyValuePair<TKey, TValue>(Key, Value);
             }
         }
 

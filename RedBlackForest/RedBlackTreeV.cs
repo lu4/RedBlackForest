@@ -4,34 +4,34 @@ using System.Text;
 
 namespace RedBlackForest
 {
-    public partial class RedBlackTree<Value> : IEnumerable<RedBlackTreeNode<Value>>
+    public partial class RedBlackTree<TValue> : IEnumerable<RedBlackTreeNode<TValue>>
     {
         /// <summary>
         /// Stores the root node of the tree.
         /// </summary>
-        private RedBlackTreeNode<Value> rootNode;
+        private RedBlackTreeNode<TValue> rootNode;
 
         /// <summary>
         /// Stores the value comparison function.
         /// </summary>
-        public IComparer<Value> Comparer { get; private set; }
+        public IComparer<TValue> Comparer { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the LeftLeaningRedBlackTree class implementing a normal dictionary.
         /// </summary>
         /// <param name="comparer">The value comparison function.</param>
-        public RedBlackTree(IComparer<Value> comparer)
+        public RedBlackTree(IComparer<TValue> comparer)
         {
             if (null == comparer)
             {
-                throw new ArgumentNullException("keyComparison");
+                throw new ArgumentNullException("comparer");
             }
 
             this.Comparer = comparer;
         }
 
         public RedBlackTree()
-            : this(Comparer<Value>.Default)
+            : this(Comparer<TValue>.Default)
         {
         }
 
@@ -48,9 +48,9 @@ namespace RedBlackForest
         /// </summary>
         /// <remarks>This method throws exception in case when element exists in collection</remarks>
         /// <param name="value">Value to add.</param>
-        public RedBlackTreeNode<Value> Add(Value value)
+        public RedBlackTreeNode<TValue> Add(TValue value)
         {
-            RedBlackTreeNode<Value> result;
+            RedBlackTreeNode<TValue> result;
             rootNode = Add(rootNode, value, out result);
             rootNode.IsBlack = true;
             return result;
@@ -62,9 +62,9 @@ namespace RedBlackForest
         /// <remarks>When adding element that exists in collection, this method not throws </remarks>
         /// <param name="value">Value to add.</param>
         /// <returns></returns>
-        public RedBlackTreeNode<Value> TryAdd(Value value)
+        public RedBlackTreeNode<TValue> TryAdd(TValue value)
         {
-            RedBlackTreeNode<Value> result;
+            RedBlackTreeNode<TValue> result;
 
             rootNode = TryAdd(rootNode, value, out result);
             rootNode.IsBlack = true;
@@ -77,7 +77,7 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="value">Value to remove.</param>
         /// <returns>True if value/value present and removed.</returns>
-        public Boolean Remove(Value value)
+        public Boolean Remove(TValue value)
         {
             Int32 initialCount = Count;
 
@@ -103,7 +103,7 @@ namespace RedBlackForest
             Count = 0;
         }
 
-        public IEnumerable<RedBlackTreeNode<Value>> Nodes
+        public IEnumerable<RedBlackTreeNode<TValue>> Nodes
         {
             get
             {
@@ -115,7 +115,7 @@ namespace RedBlackForest
         /// Gets a sequence of all the values in the tree.
         /// </summary>
         /// <returns>Sequence of all values.</returns>
-        public IEnumerable<Value> Values
+        public IEnumerable<TValue> Values
         {
             get
             {
@@ -131,10 +131,10 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="value">Value to search for.</param>
         /// <returns>Corresponding node or null if none found.</returns>
-        public RedBlackTreeNode<Value> FindNode(Value value)
+        public RedBlackTreeNode<TValue> FindNode(TValue value)
         {
             // Initialize
-            RedBlackTreeNode<Value> node = rootNode;
+            RedBlackTreeNode<TValue> node = rootNode;
 
             while (null != node)
             {
@@ -160,49 +160,49 @@ namespace RedBlackForest
             return null;
         }
 
-        public Boolean Contains(Value value)
+        public Boolean Contains(TValue value)
         {
-            RedBlackTreeNode<Value> node = FindNode(value);
+            RedBlackTreeNode<TValue> node = FindNode(value);
 
             return node != null;
         }
 
-        public Value Next(Value value)
+        public TValue Next(TValue value)
         {
             var node = NextNode(value);
 
-            return node == null ? default(Value) : node.Value;
+            return node == null ? default(TValue) : node.Value;
         }
-        public RedBlackTreeNode<Value> NextNode(Value value)
+        public RedBlackTreeNode<TValue> NextNode(TValue value)
         {
-            return SiblingNodes(value).Value2;
+            return SiblingNodes(value).Item2;
         }
 
-        public Value Previous(Value value)
+        public TValue Previous(TValue value)
         {
             var node = PreviousNode(value);
 
-            return node == null ? default(Value) : node.Value;
+            return node == null ? default(TValue) : node.Value;
         }
-        public RedBlackTreeNode<Value> PreviousNode(Value value)
+        public RedBlackTreeNode<TValue> PreviousNode(TValue value)
         {
-            return SiblingNodes(value).Value1;
+            return SiblingNodes(value).Item1;
         }
 
-        public Tuple<Value, Value> Sibling(Value value)
+        public Tuple<TValue, TValue> Sibling(TValue value)
         {
             var nodes = SiblingNodes(value);
 
-            return new Tuple<Value, Value>
+            return new Tuple<TValue, TValue>
             (
-                nodes.Value1 == null ? default(Value) : nodes.Value1.Value,
-                nodes.Value2 == null ? default(Value) : nodes.Value2.Value
+                nodes.Item1 == null ? default(TValue) : nodes.Item1.Value,
+                nodes.Item2 == null ? default(TValue) : nodes.Item2.Value
             );
         }
-        public Tuple<RedBlackTreeNode<Value>> SiblingNodes(Value value)
+        public Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>> SiblingNodes(TValue value)
         {
             if (IsEmpty)
-                return default(Tuple<RedBlackTreeNode<Value>>);
+                return default(Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>);
 
             var leftmost = true;
             var rightmost = true;
@@ -231,21 +231,21 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Value, nodeB.Value) < 0 || (Comparer.Compare(nodeA.Value, nodeC.Value) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeB, nodeA);
                         }
                     }
                 }
@@ -263,21 +263,21 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Value, nodeB.Value) < 0 || (Comparer.Compare(nodeA.Value, nodeC.Value) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeB, nodeA);
                         }
                     }
                 }
@@ -297,19 +297,19 @@ namespace RedBlackForest
                     {
                         if (nodeA.Right != null)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(GetMaximumNode(nodeA.Left), GetMinimumNode(nodeA.Right));
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(GetMaximumNode(nodeA.Left), GetMinimumNode(nodeA.Right));
                         }
                         else
                         {
                             if (Comparer.Compare(nodeA.Value, nodeB.Value) < 0 || Comparer.Compare(nodeA.Value, nodeC.Value) < 0)
                             // A < B
                             {
-                                return new Tuple<RedBlackTreeNode<Value>>(GetMaximumNode(nodeA.Left), nodeC);
+                                return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(GetMaximumNode(nodeA.Left), nodeC);
                             }
                             else
                             // B < A
                             {
-                                return new Tuple<RedBlackTreeNode<Value>>(GetMaximumNode(nodeA.Left), null);
+                                return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(GetMaximumNode(nodeA.Left), null);
                             }
                         }
                     }
@@ -317,19 +317,19 @@ namespace RedBlackForest
                     {
                         if (leftmost && rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(null, null);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(null, null);
                         }
                         else if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(null, nodeC);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(null, nodeC);
                         }
                         else if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeB, null);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeB, null);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeB, nodeC);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeB, nodeC);
                         }
                     }
                 }
@@ -338,20 +338,20 @@ namespace RedBlackForest
             }
         }
 
-        public Tuple<Value, Value> Nearest(Value value)
+        public Tuple<TValue, TValue> Nearest(TValue value)
         {
             var nodes = NearestNodes(value);
 
-            return new Tuple<Value, Value>
+            return new Tuple<TValue, TValue>
             (
-                nodes.Value1 == null ? default(Value) : nodes.Value1.Value,
-                nodes.Value2 == null ? default(Value) : nodes.Value2.Value
+                nodes.Item1 == null ? default(TValue) : nodes.Item1.Value,
+                nodes.Item2 == null ? default(TValue) : nodes.Item2.Value
             );
         }
-        public Tuple<RedBlackTreeNode<Value>> NearestNodes(Value value)
+        public Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>> NearestNodes(TValue value)
         {
             if (IsEmpty)
-                return default(Tuple<RedBlackTreeNode<Value>>);
+                return default(Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>);
 
             var leftmost = true;
             var rightmost = true;
@@ -380,21 +380,21 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Value, nodeB.Value) < 0 || (Comparer.Compare(nodeA.Value, nodeC.Value) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeB, nodeA);
                         }
                     }
                 }
@@ -412,27 +412,27 @@ namespace RedBlackForest
                     {
                         if (leftmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(null, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(null, nodeA);
                         }
 
                         if (rightmost)
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, null);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, null);
                         }
 
                         if (Comparer.Compare(nodeA.Value, nodeB.Value) < 0 || (Comparer.Compare(nodeA.Value, nodeC.Value) < 0 && 0 < comparisonA))
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeA, nodeC);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, nodeC);
                         }
                         else
                         {
-                            return new Tuple<RedBlackTreeNode<Value>>(nodeB, nodeA);
+                            return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeB, nodeA);
                         }
                     }
                 }
                 else
                 {
-                    return new Tuple<RedBlackTreeNode<Value>>(nodeA, nodeA);
+                    return new Tuple<RedBlackTreeNode<TValue>, RedBlackTreeNode<TValue>>(nodeA, nodeA);
                 }
 
                 comparisonA = Comparer.Compare(value, nodeA.Value);
@@ -444,35 +444,35 @@ namespace RedBlackForest
         /// </summary>
         public Int32 Count { get; private set; }
 
-        public Value GetMinimum()
+        public TValue GetMinimum()
         {
             var node = GetMinimumNode(rootNode);
 
-            return node == null ? default(Value) : node.Value;
+            return node == null ? default(TValue) : node.Value;
         }
-        public RedBlackTreeNode<Value> GetMinimumNode()
+        public RedBlackTreeNode<TValue> GetMinimumNode()
         {
             return GetMinimumNode(rootNode);
         }
 
-        public Value GetMaximum()
+        public TValue GetMaximum()
         {
             var node = GetMaximumNode(rootNode);
 
-            return node == null ? default(Value) : node.Value;
+            return node == null ? default(TValue) : node.Value;
         }
-        public RedBlackTreeNode<Value> GetMaximumNode()
+        public RedBlackTreeNode<TValue> GetMaximumNode()
         {
             return GetMaximumNode(rootNode);
         }
 
-        public Value RemoveMinimum()
+        public TValue RemoveMinimum()
         {
             var node = RemoveMinimumNode();
 
-            return node == null ? default(Value) : node.Value;
+            return node == null ? default(TValue) : node.Value;
         }
-        public RedBlackTreeNode<Value> RemoveMinimumNode()
+        public RedBlackTreeNode<TValue> RemoveMinimumNode()
         {
             var node = GetMinimumNode(rootNode);
 
@@ -481,13 +481,13 @@ namespace RedBlackForest
             return node;
         }
 
-        public Value RemoveMaximum()
+        public TValue RemoveMaximum()
         {
             var node = RemoveMaximumNode();
 
-            return node == null ? default(Value) : node.Value;
+            return node == null ? default(TValue) : node.Value;
         }
-        public RedBlackTreeNode<Value> RemoveMaximumNode()
+        public RedBlackTreeNode<TValue> RemoveMaximumNode()
         {
             var node = GetMaximumNode(rootNode);
 
@@ -496,12 +496,12 @@ namespace RedBlackForest
             return node;
         }
 
-        public IEnumerable<RedBlackTreeNode<Value>> EnumerateNodesDescendingFrom(Value value)
+        public IEnumerable<RedBlackTreeNode<TValue>> EnumerateNodesDescendingFrom(TValue value)
         {
             var nearest = NearestNodes(value);
 
-            var prev = nearest.Value1;
-            var next = nearest.Value2;
+            var prev = nearest.Item1;
+            var next = nearest.Item2;
 
             if (prev != null)
             {
@@ -555,7 +555,7 @@ namespace RedBlackForest
         /// <param name="value">Value to add.</param>
         /// <param name="value">Value to add.</param>
         /// <returns>New root node.</returns>
-        public IEnumerable<RedBlackTreeNode<Value>> EnumerateNodesInRange(Value minimum, Value maximum)
+        public IEnumerable<RedBlackTreeNode<TValue>> EnumerateNodesInRange(TValue minimum, TValue maximum)
         {
             foreach (var node in TraverseRange(rootNode, minimum, maximum))
             {
@@ -563,7 +563,7 @@ namespace RedBlackForest
             }
         }
 
-        public IEnumerator<RedBlackTreeNode<Value>> GetEnumerator()
+        public IEnumerator<RedBlackTreeNode<TValue>> GetEnumerator()
         {
             foreach (var node in Traverse(rootNode))
             {
@@ -571,13 +571,13 @@ namespace RedBlackForest
             }
         }
 
-        private RedBlackTreeNode<Value> Add(RedBlackTreeNode<Value> node, Value value, out RedBlackTreeNode<Value> result)
+        private RedBlackTreeNode<TValue> Add(RedBlackTreeNode<TValue> node, TValue value, out RedBlackTreeNode<TValue> result)
         {
             if (node == null)
             {
                 // Insert new node
                 Count++;
-                return result = new RedBlackTreeNode<Value> { Value = value };
+                return result = new RedBlackTreeNode<TValue> { Value = value };
             }
 
             if (IsRed(node.Left) && IsRed(node.Right))
@@ -617,13 +617,13 @@ namespace RedBlackForest
             return node;
         }
 
-        private RedBlackTreeNode<Value> TryAdd(RedBlackTreeNode<Value> node, Value value, out RedBlackTreeNode<Value> result)
+        private RedBlackTreeNode<TValue> TryAdd(RedBlackTreeNode<TValue> node, TValue value, out RedBlackTreeNode<TValue> result)
         {
             if (node == null)
             {
                 // Insert new node
                 Count++;
-                return result = new RedBlackTreeNode<Value> { Value = value };
+                return result = new RedBlackTreeNode<TValue> { Value = value };
             }
 
             if (IsRed(node.Left) && IsRed(node.Right))
@@ -672,7 +672,7 @@ namespace RedBlackForest
         /// <param name="value">Value to remove.</param>
         /// <param name="value">Value to remove.</param>
         /// <returns>True if value/value present and removed.</returns>
-        private RedBlackTreeNode<Value> Remove(RedBlackTreeNode<Value> node, Value value)
+        private RedBlackTreeNode<TValue> Remove(RedBlackTreeNode<TValue> node, TValue value)
         {
             Int32 comparisonResult = Comparer.Compare(value, node.Value);
 
@@ -719,7 +719,7 @@ namespace RedBlackForest
                         Count--;
 
                         // Find the smallest node on the right, swap, and remove it
-                        RedBlackTreeNode<Value> m = GetMinimumNode(node.Right);
+                        RedBlackTreeNode<TValue> m = GetMinimumNode(node.Right);
                         node.Value = m.Value;
                         node.Value = m.Value;
                         node.Right = DeleteMinimum(node.Right);
@@ -744,11 +744,11 @@ namespace RedBlackForest
         /// <param name="condition">Condition method.</param>
         /// <param name="selector">Selector method.</param>
         /// <returns>Sequence of selected nodes.</returns>
-        private IEnumerable<RedBlackTreeNode<Value>> Traverse(RedBlackTreeNode<Value> node)
+        private IEnumerable<RedBlackTreeNode<TValue>> Traverse(RedBlackTreeNode<TValue> node)
         {
             // Create a stack to avoid recursion
-            Stack<RedBlackTreeNode<Value>> stack = new Stack<RedBlackTreeNode<Value>>();
-            RedBlackTreeNode<Value> current = node;
+            Stack<RedBlackTreeNode<TValue>> stack = new Stack<RedBlackTreeNode<TValue>>();
+            RedBlackTreeNode<TValue> current = node;
             while (current != null)
             {
                 if (current.Left != null)
@@ -770,9 +770,9 @@ namespace RedBlackForest
             }
         }
 
-        private IEnumerable<RedBlackTreeNode<Value>> TraverseRange(RedBlackTreeNode<Value> node, Value minimum, Value maximum)
+        private IEnumerable<RedBlackTreeNode<TValue>> TraverseRange(RedBlackTreeNode<TValue> node, TValue minimum, TValue maximum)
         {
-            Stack<RedBlackTreeNode<Value>> stack = new Stack<RedBlackTreeNode<Value>>();
+            Stack<RedBlackTreeNode<TValue>> stack = new Stack<RedBlackTreeNode<TValue>>();
 
             while (node != null)
             {
