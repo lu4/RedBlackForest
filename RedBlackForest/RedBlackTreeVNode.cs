@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace RedBlackForest
 {
-    public class RBTreeNode<V>
+    public class RedBlackTreeNode<V>
     {
         public V Value { get; internal set; }
 
         internal Boolean IsBlack { get; set; }
 
-        internal RBTreeNode<V> Left { get; set; }
-        internal RBTreeNode<V> Right { get; set; }
+        internal RedBlackTreeNode<V> Left { get; set; }
+        internal RedBlackTreeNode<V> Right { get; set; }
 
         public override string ToString()
         {

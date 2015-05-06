@@ -4,14 +4,14 @@ using System.Text;
 
 namespace RedBlackForest
 {
-    partial class RBTree<Key, Value>
+    partial class RedBlackTree<Key, Value>
     {
         /// <summary>
         /// Returns true if the specified node is red.
         /// </summary>
         /// <param name="node">Specified node.</param>
         /// <returns>True if specified node is red.</returns>
-        private static Boolean IsRed(RBTreeNode<Key, Value> node)
+        private static Boolean IsRed(RedBlackTreeNode<Key, Value> node)
         {
             if (null == node)
             {
@@ -26,7 +26,7 @@ namespace RedBlackForest
         /// Flip the colors of the specified node and its direct children.
         /// </summary>
         /// <param name="node">Specified node.</param>
-        private static void FlipColor(RBTreeNode<Key, Value> node)
+        private static void FlipColor(RedBlackTreeNode<Key, Value> node)
         {
             node.IsBlack = !node.IsBlack;
             node.Left.IsBlack = !node.Left.IsBlack;
@@ -38,9 +38,9 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="node">Specified node.</param>
         /// <returns>New root node.</returns>
-        private static RBTreeNode<Key, Value> RotateLeft(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> RotateLeft(RedBlackTreeNode<Key, Value> node)
         {
-            RBTreeNode<Key, Value> x = node.Right;
+            RedBlackTreeNode<Key, Value> x = node.Right;
             node.Right = x.Left;
             x.Left = node;
             x.IsBlack = node.IsBlack;
@@ -53,9 +53,9 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="node">Specified node.</param>
         /// <returns>New root node.</returns>
-        private static RBTreeNode<Key, Value> RotateRight(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> RotateRight(RedBlackTreeNode<Key, Value> node)
         {
-            RBTreeNode<Key, Value> x = node.Left;
+            RedBlackTreeNode<Key, Value> x = node.Left;
             node.Left = x.Right;
             x.Right = node;
             x.IsBlack = node.IsBlack;
@@ -68,7 +68,7 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="node">Parent node.</param>
         /// <returns>New root node.</returns>
-        private static RBTreeNode<Key, Value> MoveRedLeft(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> MoveRedLeft(RedBlackTreeNode<Key, Value> node)
         {
             FlipColor(node);
             if (IsRed(node.Right.Left))
@@ -91,7 +91,7 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="node">Parent node.</param>
         /// <returns>New root node.</returns>
-        private static RBTreeNode<Key, Value> MoveRedRight(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> MoveRedRight(RedBlackTreeNode<Key, Value> node)
         {
             FlipColor(node);
             if (IsRed(node.Left.Left))
@@ -107,7 +107,7 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="node">Specified node.</param>
         /// <returns>New root node.</returns>
-        private static RBTreeNode<Key, Value> DeleteMinimum(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> DeleteMinimum(RedBlackTreeNode<Key, Value> node)
         {
             if (null == node.Left)
             {
@@ -133,7 +133,7 @@ namespace RedBlackForest
         /// </summary>
         /// <param name="node">Specified node.</param>
         /// <returns>New root node.</returns>
-        private static RBTreeNode<Key, Value> FixUp(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> FixUp(RedBlackTreeNode<Key, Value> node)
         {
             if (IsRed(node.Right))
             {
@@ -167,12 +167,12 @@ namespace RedBlackForest
             return node;
         }
 
-        private static RBTreeNode<Key, Value> GetMinimumNode(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> GetMinimumNode(RedBlackTreeNode<Key, Value> node)
         {
             if (node != null)
             {
                 // Initialize
-                RBTreeNode<Key, Value> current = node;
+                RedBlackTreeNode<Key, Value> current = node;
 
                 while (true)
                 {
@@ -191,12 +191,12 @@ namespace RedBlackForest
                 return null;
             }
         }
-        private static RBTreeNode<Key, Value> GetMaximumNode(RBTreeNode<Key, Value> node)
+        private static RedBlackTreeNode<Key, Value> GetMaximumNode(RedBlackTreeNode<Key, Value> node)
         {
             if (node != null)
             {
                 // Initialize
-                RBTreeNode<Key, Value> current = node;
+                RedBlackTreeNode<Key, Value> current = node;
 
                 while (true)
                 {
