@@ -17,14 +17,14 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String> { { 0, "Zero" }, { 1, "One" } };
 
-            var result1 = tree.GetOrAdd(2, "Two");
+            var result1 = tree.TryGetOrAdd(2, "Two");
             var result2 = tree[2];
 
             Assert.That(result1, Is.EqualTo("Two"));
             Assert.That(result2, Is.EqualTo("Two"));
 
-            var result3 = tree.GetOrAdd(3, () => "Three");
-            var result4 = tree.GetOrAdd(3, () => "Four");
+            var result3 = tree.TryGetOrAdd(3, () => "Three");
+            var result4 = tree.TryGetOrAdd(3, () => "Four");
             var result5 = tree[3];
 
             Assert.That(result3, Is.EqualTo("Three"));
@@ -38,7 +38,7 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<Int32, String> { { 0, "Zero" }, { 1, "One" } };
 
-            var result1 = tree.GetOrAdd(0, "Two");
+            var result1 = tree.TryGetOrAdd(0, "Two");
 
             var result2 = tree[0];
 
