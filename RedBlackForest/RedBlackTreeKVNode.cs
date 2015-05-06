@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace RedBlackForest
 {
-    public class RedBlackTreeNode<TKey, TValue>
+    internal class RedBlackTreeNode<TKey, TValue>
     {
         public TKey Key { get; internal set; }
         public TValue Value { get; internal set; }
@@ -15,7 +15,7 @@ namespace RedBlackForest
         internal RedBlackTreeNode<TKey, TValue> Left { get; set; }
         internal RedBlackTreeNode<TKey, TValue> Right { get; set; }
 
-        public KeyValuePair<TKey, TValue> Pair
+        public KeyValuePair<TKey, TValue> KeyValuePair
         {
             get
             {
