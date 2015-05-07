@@ -109,8 +109,8 @@ namespace RedBlackForest.Tests
         {
             var tree = new RedBlackTree<String, int> { { "abc", 0 }, { "bab", 1 }, { "bba", 2 }, { "bua", 3 }, { "bvka kapa", 4 }, { "zza", 5 } };
 
-            var left = tree.TraverseKeyValuePairsFromLeftToRight("b").ToArray();
-            var right = tree.TraverseKeyValuePairsFromRightToLeft("b").ToArray();
+            var left = tree.EnumeratePairsFromLeftToRight("b").ToArray();
+            var right = tree.EnumeratePairsFromRightToLeft("b").ToArray();
 
             Console.WriteLine("Test");
         }

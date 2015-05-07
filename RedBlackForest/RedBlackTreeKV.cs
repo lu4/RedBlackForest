@@ -117,7 +117,7 @@ namespace RedBlackForest
         {
             get
             {
-                return TraverseLeftToRight().Select(node => node.Key);
+                return EnumerateFromLeftToRight().Select(node => node.Key);
             }
         }
 
@@ -129,7 +129,7 @@ namespace RedBlackForest
         {
             get
             {
-                return TraverseLeftToRight().Select(node => node.Value);
+                return EnumerateFromLeftToRight().Select(node => node.Value);
             }
         }
 
@@ -137,7 +137,7 @@ namespace RedBlackForest
         {
             get
             {
-                return TraverseLeftToRight().Select(node => node.KeyValuePair);
+                return EnumerateFromLeftToRight().Select(node => node.KeyValuePair);
             }
         }
 
@@ -698,7 +698,7 @@ namespace RedBlackForest
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return TraverseLeftToRight().Select(x => x.KeyValuePair).GetEnumerator();
+            return EnumerateFromLeftToRight().Select(x => x.KeyValuePair).GetEnumerator();
         }
 
         private RedBlackTreeNode<TKey, TValue> Add(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value, out RedBlackTreeNode<TKey, TValue> result)
@@ -926,7 +926,7 @@ namespace RedBlackForest
         /// Traverses a subset of the sequence of nodes in order and selects the specified nodes.
         /// </summary>
         /// <returns>Sequence of selected nodes.</returns>
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseLeftToRight()
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateFromLeftToRight()
         {
             var node = RootNode;
 
@@ -959,7 +959,7 @@ namespace RedBlackForest
                 }
             }
         }
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseLeftToRight(TKey minimum)
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateFromLeftToRight(TKey minimum)
         {
             var node = RootNode;
 
@@ -1022,7 +1022,7 @@ namespace RedBlackForest
                 }
             }
         }
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseLeftToRight(TKey minimum, TKey maximum)
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateFromLeftToRight(TKey minimum, TKey maximum)
         {
             var node = RootNode;
 
@@ -1130,7 +1130,7 @@ namespace RedBlackForest
                 }
             }
         }
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRightToLeft()
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateFromRightToLeft()
         {
             var node = RootNode;
 
@@ -1163,7 +1163,7 @@ namespace RedBlackForest
                 }
             }
         }
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRightToLeft(TKey maximum)
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateFromRightToLeft(TKey maximum)
         {
             var node = RootNode;
 
@@ -1226,7 +1226,7 @@ namespace RedBlackForest
                 }
             }
         }
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRightToLeft(TKey minimum, TKey maximum)
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> EnumerateFromRightToLeft(TKey minimum, TKey maximum)
         {
             var node = RootNode;
 
@@ -1335,84 +1335,84 @@ namespace RedBlackForest
             }
         }
 
-        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromLeftToRight()
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumeratePairsFromLeftToRight()
         {
-            return TraverseLeftToRight().Select(x => x.KeyValuePair);
+            return EnumerateFromLeftToRight().Select(x => x.KeyValuePair);
         }
-        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromRightToLeft()
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumeratePairsFromRightToLeft()
         {
-            return TraverseRightToLeft().Select(x => x.KeyValuePair);
+            return EnumerateFromRightToLeft().Select(x => x.KeyValuePair);
         }
-        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromLeftToRight(TKey minimum)
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumeratePairsFromLeftToRight(TKey minimum)
         {
-            return TraverseLeftToRight(minimum).Select(x => x.KeyValuePair);
+            return EnumerateFromLeftToRight(minimum).Select(x => x.KeyValuePair);
         }
-        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromRightToLeft(TKey maximum)
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumeratePairsFromRightToLeft(TKey maximum)
         {
-            return TraverseRightToLeft(maximum).Select(x => x.KeyValuePair);
+            return EnumerateFromRightToLeft(maximum).Select(x => x.KeyValuePair);
         }
-        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromLeftToRight(TKey minimum, TKey maximum)
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumeratePairsFromLeftToRight(TKey minimum, TKey maximum)
         {
-            return TraverseLeftToRight(minimum, maximum).Select(x => x.KeyValuePair);
+            return EnumerateFromLeftToRight(minimum, maximum).Select(x => x.KeyValuePair);
         }
-        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromRightToLeft(TKey minimum, TKey maximum)
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumeratePairsFromRightToLeft(TKey minimum, TKey maximum)
         {
-            return TraverseRightToLeft(minimum, maximum).Select(x => x.KeyValuePair);
-        }
-
-        public IEnumerable<TKey> TraverseKeysFromLeftToRight()
-        {
-            return TraverseLeftToRight().Select(x => x.Key);
-        }
-        public IEnumerable<TKey> TraverseKeysFromRightToLeft()
-        {
-            return TraverseRightToLeft().Select(x => x.Key);
-        }
-        public IEnumerable<TKey> TraverseKeysFromLeftToRight(TKey minimum)
-        {
-            return TraverseLeftToRight(minimum).Select(x => x.Key);
-        }
-        public IEnumerable<TKey> TraverseKeysFromRightToLeft(TKey maximum)
-        {
-            return TraverseRightToLeft(maximum).Select(x => x.Key);
-        }
-        public IEnumerable<TKey> TraverseKeysFromLeftToRight(TKey minimum, TKey maximum)
-        {
-            return TraverseLeftToRight(minimum, maximum).Select(x => x.Key);
-        }
-        public IEnumerable<TKey> TraverseKeysFromRightToLeft(TKey minimum, TKey maximum)
-        {
-            return TraverseRightToLeft(minimum, maximum).Select(x => x.Key);
+            return EnumerateFromRightToLeft(minimum, maximum).Select(x => x.KeyValuePair);
         }
 
-        public IEnumerable<TValue> TraverseValuesFromLeftToRight()
+        public IEnumerable<TKey> EnumerateKeysFromLeftToRight()
         {
-            return TraverseLeftToRight().Select(x => x.Value);
+            return EnumerateFromLeftToRight().Select(x => x.Key);
         }
-        public IEnumerable<TValue> TraverseValuesFromRightToLeft()
+        public IEnumerable<TKey> EnumerateKeysFromRightToLeft()
         {
-            return TraverseRightToLeft().Select(x => x.Value);
+            return EnumerateFromRightToLeft().Select(x => x.Key);
         }
-        public IEnumerable<TValue> TraverseValuesFromLeftToRight(TKey minimum)
+        public IEnumerable<TKey> EnumerateKeysFromLeftToRight(TKey minimum)
         {
-            return TraverseLeftToRight(minimum).Select(x => x.Value);
+            return EnumerateFromLeftToRight(minimum).Select(x => x.Key);
         }
-        public IEnumerable<TValue> TraverseValuesFromRightToLeft(TKey maximum)
+        public IEnumerable<TKey> EnumerateKeysFromRightToLeft(TKey maximum)
         {
-            return TraverseRightToLeft(maximum).Select(x => x.Value);
+            return EnumerateFromRightToLeft(maximum).Select(x => x.Key);
         }
-        public IEnumerable<TValue> TraverseValuesFromLeftToRight(TKey minimum, TKey maximum)
+        public IEnumerable<TKey> EnumerateKeysFromLeftToRight(TKey minimum, TKey maximum)
         {
-            return TraverseLeftToRight(minimum, maximum).Select(x => x.Value);
+            return EnumerateFromLeftToRight(minimum, maximum).Select(x => x.Key);
         }
-        public IEnumerable<TValue> TraverseValuesFromRightToLeft(TKey minimum, TKey maximum)
+        public IEnumerable<TKey> EnumerateKeysFromRightToLeft(TKey minimum, TKey maximum)
         {
-            return TraverseRightToLeft(minimum, maximum).Select(x => x.Value);
+            return EnumerateFromRightToLeft(minimum, maximum).Select(x => x.Key);
+        }
+
+        public IEnumerable<TValue> EnumerateValuesFromLeftToRight()
+        {
+            return EnumerateFromLeftToRight().Select(x => x.Value);
+        }
+        public IEnumerable<TValue> EnumerateValuesFromRightToLeft()
+        {
+            return EnumerateFromRightToLeft().Select(x => x.Value);
+        }
+        public IEnumerable<TValue> EnumerateValuesFromLeftToRight(TKey minimum)
+        {
+            return EnumerateFromLeftToRight(minimum).Select(x => x.Value);
+        }
+        public IEnumerable<TValue> EnumerateValuesFromRightToLeft(TKey maximum)
+        {
+            return EnumerateFromRightToLeft(maximum).Select(x => x.Value);
+        }
+        public IEnumerable<TValue> EnumerateValuesFromLeftToRight(TKey minimum, TKey maximum)
+        {
+            return EnumerateFromLeftToRight(minimum, maximum).Select(x => x.Value);
+        }
+        public IEnumerable<TValue> EnumerateValuesFromRightToLeft(TKey minimum, TKey maximum)
+        {
+            return EnumerateFromRightToLeft(minimum, maximum).Select(x => x.Value);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return TraverseLeftToRight().GetEnumerator();
+            return EnumerateFromLeftToRight().GetEnumerator();
         }
 
         public TValue Set(TKey key, TValue value)
