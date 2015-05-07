@@ -32,8 +32,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedBlackTreeK.cs" />
     <Compile Include="RedBlackTreeKV.cs" />
+    <Compile Include="RedBlackTreeK.StaticMethods.cs" />
     <Compile Include="RedBlackTreeKV.StaticMethods.cs" />
+    <Compile Include="RedBlackTreeKNode.cs" />
     <Compile Include="RedBlackTreeKVNode.cs" />
     <Compile Include="Pair.cs" />
   </ItemGroup>

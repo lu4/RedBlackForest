@@ -66,41 +66,41 @@ namespace RedBlackForest.Tests
             var result8 = tree.NearestPairs(8);
             var result9 = tree.NearestPairs(9);
 
-            Assert.That(resultZ.A, Is.Null);
-            Assert.That(resultZ.B, Is.Null);
+            Assert.That(resultZ.IsSetA, Is.False);
+            Assert.That(resultZ.IsSetB, Is.False);
 
-            Assert.That(result0.A, Is.Null);
-            Assert.That(result0.B.Value.Key, Is.EqualTo(2));
-            Assert.That(result0.B.Value.Value, Is.EqualTo("Two"));
+            Assert.That(result0.IsSetA, Is.False);
+            Assert.That(result0.B.Key, Is.EqualTo(2));
+            Assert.That(result0.B.Value, Is.EqualTo("Two"));
 
-            Assert.That(result2.A.Value.Key, Is.EqualTo(2));
-            Assert.That(result2.A.Value.Value, Is.EqualTo("Two"));
-            Assert.That(result2.B.Value.Key, Is.EqualTo(2));
-            Assert.That(result2.B.Value.Value, Is.EqualTo("Two"));
+            Assert.That(result2.A.Key, Is.EqualTo(2));
+            Assert.That(result2.A.Value, Is.EqualTo("Two"));
+            Assert.That(result2.B.Key, Is.EqualTo(2));
+            Assert.That(result2.B.Value, Is.EqualTo("Two"));
 
-            Assert.That(result3.A.Value.Key, Is.EqualTo(2));
-            Assert.That(result3.A.Value.Value, Is.EqualTo("Two"));
-            Assert.That(result3.B.Value.Key, Is.EqualTo(5));
-            Assert.That(result3.B.Value.Value, Is.EqualTo("Five"));
+            Assert.That(result3.A.Key, Is.EqualTo(2));
+            Assert.That(result3.A.Value, Is.EqualTo("Two"));
+            Assert.That(result3.B.Key, Is.EqualTo(5));
+            Assert.That(result3.B.Value, Is.EqualTo("Five"));
 
-            Assert.That(result5.A.Value.Key, Is.EqualTo(5));
-            Assert.That(result5.A.Value.Value, Is.EqualTo("Five"));
-            Assert.That(result5.B.Value.Key, Is.EqualTo(5));
-            Assert.That(result5.B.Value.Value, Is.EqualTo("Five"));
+            Assert.That(result5.A.Key, Is.EqualTo(5));
+            Assert.That(result5.A.Value, Is.EqualTo("Five"));
+            Assert.That(result5.B.Key, Is.EqualTo(5));
+            Assert.That(result5.B.Value, Is.EqualTo("Five"));
 
-            Assert.That(result6.A.Value.Key, Is.EqualTo(5));
-            Assert.That(result6.A.Value.Value, Is.EqualTo("Five"));
-            Assert.That(result6.B.Value.Key, Is.EqualTo(8));
-            Assert.That(result6.B.Value.Value, Is.EqualTo("Eight"));
+            Assert.That(result6.A.Key, Is.EqualTo(5));
+            Assert.That(result6.A.Value, Is.EqualTo("Five"));
+            Assert.That(result6.B.Key, Is.EqualTo(8));
+            Assert.That(result6.B.Value, Is.EqualTo("Eight"));
 
-            Assert.That(result8.A.Value.Key, Is.EqualTo(8));
-            Assert.That(result8.A.Value.Value, Is.EqualTo("Eight"));
-            Assert.That(result8.B.Value.Key, Is.EqualTo(8));
-            Assert.That(result8.B.Value.Value, Is.EqualTo("Eight"));
+            Assert.That(result8.A.Key, Is.EqualTo(8));
+            Assert.That(result8.A.Value, Is.EqualTo("Eight"));
+            Assert.That(result8.B.Key, Is.EqualTo(8));
+            Assert.That(result8.B.Value, Is.EqualTo("Eight"));
 
-            Assert.That(result9.A.Value.Key, Is.EqualTo(8));
-            Assert.That(result9.A.Value.Value, Is.EqualTo("Eight"));
-            Assert.That(result9.B, Is.Null);
+            Assert.That(result9.A.Key, Is.EqualTo(8));
+            Assert.That(result9.A.Value, Is.EqualTo("Eight"));
+            Assert.That(result9.IsSetB, Is.False);
         }
 
 
