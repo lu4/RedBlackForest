@@ -40,13 +40,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RedBlackForest\RedBlackForest.csproj">
-      <Project>{B64BE780-3FE6-4792-B336-8FBBEA88048E}</Project>
-      <Name>RedBlackForest</Name>
-    </ProjectReference>
+    <Compile Include="GenericTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericTests.cs" />
+    <ProjectReference Include="..\RedBlackForest\RedBlackForest.csproj">
+      <Project>{f8db7a32-79ac-4b3f-94a3-1b32f16e70ee}</Project>
+      <Name>RedBlackForest</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -129,7 +129,7 @@ namespace RedBlackForest
         }
 
         /// <summary>
-        /// MaInt32ains invariants by adjusting the specified nodes children.
+        /// Maintains invariants by adjusting the specified nodes children.
         /// </summary>
         /// <param name="node">Specified node.</param>
         /// <returns>New root node.</returns>
@@ -172,7 +172,7 @@ namespace RedBlackForest
             if (node != null)
             {
                 // Initialize
-                RedBlackTreeNode<TKey, TValue> current = node;
+                var current = node;
 
                 while (true)
                 {
@@ -180,23 +180,20 @@ namespace RedBlackForest
                     {
                         return current;
                     }
-                    else
-                    {
-                        current = current.Left;
-                    }
+
+                    current = current.Left;
                 }
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
+
         private static RedBlackTreeNode<TKey, TValue> GetMaximumNode(RedBlackTreeNode<TKey, TValue> node)
         {
             if (node != null)
             {
                 // Initialize
-                RedBlackTreeNode<TKey, TValue> current = node;
+                var current = node;
 
                 while (true)
                 {
@@ -204,16 +201,11 @@ namespace RedBlackForest
                     {
                         return current;
                     }
-                    else
-                    {
-                        current = current.Right;
-                    }
+                    current = current.Right;
                 }
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
     }
 }

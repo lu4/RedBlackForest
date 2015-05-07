@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace RedBlackForest
 {
-    public class RedBlackTreeNode<TKey, TValue>
+    internal class RedBlackTreeNode<TKey, TValue>
     {
         public TKey Key { get; internal set; }
         public TValue Value { get; internal set; }
 
-        internal Boolean IsBlack { get; set; }
+        public Boolean IsBlack { get; set; }
 
-        internal RedBlackTreeNode<TKey, TValue> Left { get; set; }
-        internal RedBlackTreeNode<TKey, TValue> Right { get; set; }
+        public RedBlackTreeNode<TKey, TValue> Left { get; internal set; }
+        public RedBlackTreeNode<TKey, TValue> Right { get; internal set; }
 
         public KeyValuePair<TKey, TValue> KeyValuePair
         {

@@ -10,7 +10,7 @@ namespace RedBlackForest
         /// <summary>
         /// Stores the root node of the tree.
         /// </summary>
-        private RedBlackTreeNode<TKey, TValue> rootNode;
+        private RedBlackTreeNode<TKey, TValue> RootNode { get; set; }
 
         /// <summary>
         /// Stores the key comparison function.
@@ -40,9 +40,14 @@ namespace RedBlackForest
         {
             get
             {
-                return rootNode == null;
+                return RootNode == null;
             }
         }
+
+        /// <summary>
+        /// Gets the count of key/value pairs in the tree.
+        /// </summary>
+        public Int32 Count { get; private set; }
 
         /// <summary>
         /// Adds a key/value pair to the tree.
@@ -52,8 +57,8 @@ namespace RedBlackForest
         public void Add(TKey key, TValue value)
         {
             RedBlackTreeNode<TKey, TValue> result;
-            rootNode = Add(rootNode, key, value, out result);
-            rootNode.IsBlack = true;
+            RootNode = Add(RootNode, key, value, out result);
+            RootNode.IsBlack = true;
         }
 
         /// <summary>
@@ -67,8 +72,8 @@ namespace RedBlackForest
         {
             RedBlackTreeNode<TKey, TValue> result;
 
-            rootNode = TryAdd(rootNode, key, value, out result);
-            rootNode.IsBlack = true;
+            RootNode = TryAdd(RootNode, key, value, out result);
+            RootNode.IsBlack = true;
 
             return result != null;
         }
@@ -82,13 +87,13 @@ namespace RedBlackForest
         {
             var initialCount = Count;
 
-            if (null != rootNode)
+            if (null != RootNode)
             {
-                rootNode = Remove(rootNode, key);
+                RootNode = Remove(RootNode, key);
 
-                if (null != rootNode)
+                if (null != RootNode)
                 {
-                    rootNode.IsBlack = true;
+                    RootNode.IsBlack = true;
                 }
             }
 
@@ -100,7 +105,7 @@ namespace RedBlackForest
         /// </summary>
         public void Clear()
         {
-            rootNode = null;
+            RootNode = null;
             Count = 0;
         }
 
@@ -112,10 +117,9 @@ namespace RedBlackForest
         {
             get
             {
-                return Traverse(rootNode).Select(node => node.Key);
+                return TraverseLeftToRight().Select(node => node.Key);
             }
         }
-
 
         /// <summary>
         /// Gets a sequence of all the values in the tree.
@@ -125,7 +129,7 @@ namespace RedBlackForest
         {
             get
             {
-                return Traverse(rootNode).Select(node => node.Value);
+                return TraverseLeftToRight().Select(node => node.Value);
             }
         }
 
@@ -133,14 +137,14 @@ namespace RedBlackForest
         {
             get
             {
-                return Traverse(rootNode).Select(node => node.KeyValuePair);
+                return TraverseLeftToRight().Select(node => node.KeyValuePair);
             }
         }
 
-        public RedBlackTreeNode<TKey, TValue> FindNode(TKey key)
+        private RedBlackTreeNode<TKey, TValue> FindNode(TKey key)
         {
             // Initialize
-            var node = rootNode;
+            var node = RootNode;
 
             while (null != node)
             {
@@ -193,8 +197,8 @@ namespace RedBlackForest
             }
             set
             {
-                rootNode = Set(rootNode, key, value);
-                rootNode.IsBlack = true;
+                RootNode = Set(RootNode, key, value);
+                RootNode.IsBlack = true;
             }
         }
 
@@ -249,67 +253,59 @@ namespace RedBlackForest
             return false;
         }
 
+
         public TKey NextKey(TKey key)
         {
-            var node = NextNode(key);
+            var node = SiblingNodes(key).B;
 
             return node == null ? default(TKey) : node.Key;
         }
 
         public TValue NextValue(TKey key)
         {
-            var node = NextNode(key);
+            var node = SiblingNodes(key).B;
 
             return node == null ? default(TValue) : node.Value;
         }
 
-        public KeyValuePair<TKey, TValue> NextPair(TKey key)
+        public KeyValuePair<TKey, TValue>? NextPair(TKey key)
         {
-            var node = NextNode(key);
+            var node = SiblingNodes(key).B;
 
-            return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
-        }
-
-        public RedBlackTreeNode<TKey, TValue> NextNode(TKey key)
-        {
-            return SiblingNodes(key).B;
+            return node == null ? default(KeyValuePair<TKey, TValue>?) : node.KeyValuePair;
         }
 
         public TKey PreviousKey(TKey key)
         {
-            var node = PreviousNode(key);
+            var node = SiblingNodes(key).A;
 
             return node == null ? default(TKey) : node.Key;
         }
 
         public TValue PreviousValue(TKey key)
         {
-            var node = PreviousNode(key);
+            var node = SiblingNodes(key).A;
 
             return node == null ? default(TValue) : node.Value;
         }
 
-        public KeyValuePair<TKey, TValue> PreviousPair(TKey key)
+        public KeyValuePair<TKey, TValue>? PreviousPair(TKey key)
         {
-            var node = PreviousNode(key);
+            var node = SiblingNodes(key).A;
 
-            return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
+            return node == null ? default(KeyValuePair<TKey, TValue>?) : node.KeyValuePair;
         }
 
-        public RedBlackTreeNode<TKey, TValue> PreviousNode(TKey key)
-        {
-            return SiblingNodes(key).A;
-        }
 
         public Pair<TKey> SiblingKeys(TKey key)
         {
             var nodes = SiblingNodes(key);
 
             return new Pair<TKey>
-                (
+            (
                 nodes.A == null ? default(TKey) : nodes.A.Key,
                 nodes.B == null ? default(TKey) : nodes.B.Key
-                );
+            );
         }
 
         public Pair<TValue> SiblingValues(TKey key)
@@ -323,18 +319,18 @@ namespace RedBlackForest
                 );
         }
 
-        public Pair<KeyValuePair<TKey, TValue>> SiblingPairs(TKey key)
+        public Pair<KeyValuePair<TKey, TValue>?> SiblingPairs(TKey key)
         {
             var nodes = SiblingNodes(key);
 
-            return new Pair<KeyValuePair<TKey, TValue>>
+            return new Pair<KeyValuePair<TKey, TValue>?>
             (
-                nodes.A == null ? default(KeyValuePair<TKey, TValue>) : nodes.A.KeyValuePair,
-                nodes.B == null ? default(KeyValuePair<TKey, TValue>) : nodes.B.KeyValuePair
+                nodes.A == null ? default(KeyValuePair<TKey, TValue>?) : nodes.A.KeyValuePair,
+                nodes.B == null ? default(KeyValuePair<TKey, TValue>?) : nodes.B.KeyValuePair
             );
         }
 
-        public Pair<RedBlackTreeNode<TKey, TValue>> SiblingNodes(TKey key)
+        private Pair<RedBlackTreeNode<TKey, TValue>> SiblingNodes(TKey key)
         {
             if (IsEmpty)
                 return default(Pair<RedBlackTreeNode<TKey, TValue>>);
@@ -342,9 +338,9 @@ namespace RedBlackForest
             var leftmost = true;
             var rightmost = true;
 
-            var nodeA = rootNode;
-            var nodeB = rootNode;
-            var nodeC = rootNode;
+            var nodeA = RootNode;
+            var nodeB = RootNode;
+            var nodeC = RootNode;
 
             var comparison = Comparer.Compare(key, nodeA.Key);
 
@@ -450,6 +446,7 @@ namespace RedBlackForest
             }
         }
 
+
         public Pair<TKey> NearestKeys(TKey key)
         {
             var nodes = NearestNodes(key);
@@ -472,18 +469,18 @@ namespace RedBlackForest
                 );
         }
 
-        public Pair<KeyValuePair<TKey, TValue>> NearestPairs(TKey key)
+        public Pair<KeyValuePair<TKey, TValue>?> NearestPairs(TKey key)
         {
             var nodes = NearestNodes(key);
 
-            return new Pair<KeyValuePair<TKey, TValue>>
+            return new Pair<KeyValuePair<TKey, TValue>?>
             (
-                nodes.A == null ? default(KeyValuePair<TKey, TValue>) : nodes.A.KeyValuePair,
-                nodes.B == null ? default(KeyValuePair<TKey, TValue>) : nodes.B.KeyValuePair
+                nodes.A == null ? default(KeyValuePair<TKey, TValue>?) : nodes.A.KeyValuePair,
+                nodes.B == null ? default(KeyValuePair<TKey, TValue>?) : nodes.B.KeyValuePair
             );
         }
 
-        public Pair<RedBlackTreeNode<TKey, TValue>> NearestNodes(TKey key)
+        private Pair<RedBlackTreeNode<TKey, TValue>> NearestNodes(TKey key)
         {
             if (IsEmpty)
                 return default(Pair<RedBlackTreeNode<TKey, TValue>>);
@@ -491,9 +488,9 @@ namespace RedBlackForest
             var leftmost = true;
             var rightmost = true;
 
-            var nodeA = rootNode;
-            var nodeB = rootNode;
-            var nodeC = rootNode;
+            var nodeA = RootNode;
+            var nodeB = RootNode;
+            var nodeC = RootNode;
 
             var comparison = Comparer.Compare(key, nodeA.Key);
 
@@ -558,130 +555,155 @@ namespace RedBlackForest
             }
         }
 
-        /// <summary>
-        /// Gets the count of key/value pairs in the tree.
-        /// </summary>
-        public Int32 Count { get; private set; }
 
         public TKey GetMinimumKey()
         {
-            var node = GetMinimumNode(rootNode);
+            var node = GetMinimumNode(RootNode);
 
             return node == null ? default(TKey) : node.Key;
         }
 
         public TValue GetMinimumValue()
         {
-            var node = GetMinimumNode(rootNode);
+            var node = GetMinimumNode(RootNode);
 
             return node == null ? default(TValue) : node.Value;
         }
 
         public KeyValuePair<TKey, TValue> GetMinimumPair()
         {
-            var node = GetMinimumNode(rootNode);
+            var node = GetMinimumNode(RootNode);
 
             return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
         }
 
         public TKey GetMaximumKey()
         {
-            var node = GetMaximumNode(rootNode);
+            var node = GetMaximumNode(RootNode);
 
             return node == null ? default(TKey) : node.Key;
         }
 
         public TValue GetMaximumValue()
         {
-            var node = GetMaximumNode(rootNode);
+            var node = GetMaximumNode(RootNode);
 
             return node == null ? default(TValue) : node.Value;
         }
 
         public KeyValuePair<TKey, TValue> GetMaximumPair()
         {
-            var node = GetMaximumNode(rootNode);
+            var node = GetMaximumNode(RootNode);
 
             return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
         }
 
         public void RemoveMinimum()
         {
-            var node = GetMaximumNode(rootNode);
+            var node = GetMaximumNode(RootNode);
 
             if (node != null) Remove(node.Key);
-        }
-
-        public RedBlackTreeNode<TKey, TValue> RemoveMinimumNode()
-        {
-            var node = GetMinimumNode(rootNode);
-
-            if (node != null) Remove(node.Key);
-
-            return node;
-        }
-
-        public RedBlackTreeNode<TKey, TValue> RemoveMaximumNode()
-        {
-            var node = GetMaximumNode(rootNode);
-
-            if (node != null) Remove(node.Key);
-
-            return node;
         }
 
         public TKey RemoveMinimumKey()
         {
-            var node = RemoveMinimumNode();
+            var node = GetMinimumNode(RootNode);
 
-            return node == null ? default(TKey) : node.Key;
+            if (node != null)
+            {
+                Remove(node.Key);
+
+                return node.Key;
+            }
+
+            return default(TKey);
         }
 
         public TValue RemoveMinimumValue()
         {
-            var node = RemoveMinimumNode();
+            var node = GetMinimumNode(RootNode);
 
-            return node == null ? default(TValue) : node.Value;
+            if (node != null)
+            {
+                Remove(node.Key);
+
+                return node.Value;
+            }
+
+            return default(TValue);
         }
 
-        public KeyValuePair<TKey, TValue> RemoveMinimumPair()
+        public KeyValuePair<TKey, TValue>? RemoveMinimumPair()
         {
-            var node = RemoveMinimumNode();
+            var node = GetMinimumNode(RootNode);
 
-            return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
+            if (node != null)
+            {
+                Remove(node.Key);
+
+                return node.KeyValuePair;
+            }
+
+            return default(KeyValuePair<TKey, TValue>?);
         }
 
         public void RemoveMaximum()
         {
-            var node = GetMaximumNode(rootNode);
+            var node = GetMaximumNode(RootNode);
 
             if (node != null) Remove(node.Key);
         }
 
         public TKey RemoveMaximumKey()
         {
-            var node = RemoveMaximumNode();
+            var node = GetMaximumNode(RootNode);
 
-            return node == null ? default(TKey) : node.Key;
+            if (node != null)
+            {
+                Remove(node.Key);
+
+                return node.Key;
+            }
+
+            return default(TKey);
         }
 
         public TValue RemoveMaximumValue()
         {
-            var node = RemoveMaximumNode();
+            var node = GetMaximumNode(RootNode);
 
-            return node == null ? default(TValue) : node.Value;
+            if (node != null)
+            {
+                Remove(node.Key);
+
+                return node.Value;
+            }
+
+            return default(TValue);
         }
 
-        public KeyValuePair<TKey, TValue> RemoveMaximumPair()
+        public KeyValuePair<TKey, TValue>? RemoveMaximumPair()
         {
-            var node = RemoveMaximumNode();
+            var node = GetMaximumNode(RootNode);
 
-            return node == null ? default(KeyValuePair<TKey, TValue>) : node.KeyValuePair;
+            if (node != null)
+            {
+                Remove(node.Key);
+
+                return node.KeyValuePair;
+            }
+
+            return default(KeyValuePair<TKey, TValue>?);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return Traverse(rootNode).Select(x => x.KeyValuePair).GetEnumerator();
+            return TraverseLeftToRight().Select(x => x.KeyValuePair).GetEnumerator();
+        }
+
+        public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateRange(TKey minimum, TKey maximum)
+        {
+            return TraverseLeftToRight(minimum, maximum).Select(x => x.KeyValuePair);
         }
 
         public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateDescending(TKey key)
@@ -697,8 +719,8 @@ namespace RedBlackForest
                 {
                     yield return prev.KeyValuePair;
 
-                    next = NextNode(next.Key);
-                    prev = PreviousNode(prev.Key);
+                    prev = SiblingNodes(prev.Key).A;
+                    next = SiblingNodes(next.Key).B;
                 }
             }
 
@@ -710,13 +732,13 @@ namespace RedBlackForest
                 {
                     yield return prev.KeyValuePair;
 
-                    prev = PreviousNode(prev.Key);
+                    prev = SiblingNodes(prev.Key).A;
                 }
                 else
                 {
                     yield return next.KeyValuePair;
 
-                    next = NextNode(next.Key);
+                    next = SiblingNodes(next.Key).B;
                 }
 
                 takePrev = !takePrev;
@@ -726,25 +748,19 @@ namespace RedBlackForest
             {
                 yield return prev.KeyValuePair;
 
-                prev = PreviousNode(prev.Key);
+                prev = SiblingNodes(prev.Key).A;
             }
 
             while (next != null)
             {
                 yield return next.KeyValuePair;
 
-                next = NextNode(next.Key);
+                next = SiblingNodes(next.Key).B;
             }
 
         }
 
-        public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateRange(TKey minimum, TKey maximum)
-        {
-            return TraverseRange(rootNode, minimum, maximum).Select(x => x.KeyValuePair);
-        }
-
-        private RedBlackTreeNode<TKey, TValue> Add(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value,
-            out RedBlackTreeNode<TKey, TValue> result)
+        private RedBlackTreeNode<TKey, TValue> Add(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value, out RedBlackTreeNode<TKey, TValue> result)
         {
             if (node == null)
             {
@@ -791,8 +807,7 @@ namespace RedBlackForest
             return node;
         }
 
-        private RedBlackTreeNode<TKey, TValue> TryAdd(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value,
-            out RedBlackTreeNode<TKey, TValue> result)
+        private RedBlackTreeNode<TKey, TValue> TryAdd(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value, out RedBlackTreeNode<TKey, TValue> result)
         {
             if (node == null)
             {
@@ -969,38 +984,44 @@ namespace RedBlackForest
         /// <summary>
         /// Traverses a subset of the sequence of nodes in order and selects the specified nodes.
         /// </summary>
-        /// <param name="node">Starting node.</param>
         /// <returns>Sequence of selected nodes.</returns>
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> Traverse(RedBlackTreeNode<TKey, TValue> node)
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseLeftToRight()
         {
-            // Create a stack to avoid recursion
+            var node = RootNode;
+
             var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
 
-            var current = node;
-
-            while (current != null)
+            while (node != null)
             {
-                if (current.Left != null)
+                if (node.Left != null)
                 {
-                    // Save current state and go left
-                    stack.Push(current);
-                    current = current.Left;
+                    stack.Push(node);
+                    node = node.Left;
                 }
                 else
                 {
-                    do
+                    while (true)
                     {
-                        yield return current;
-                        // Go right - or up if nothing to the right
-                        current = current.Right;
-                    } while ((current == null) && (stack.Count > 0) && ((current = stack.Pop()) != null));
+                        yield return node;
+
+                        node = node.Right;
+
+                        if (node == null && stack.Count > 0)
+                        {
+                            node = stack.Pop();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
             }
         }
-
-        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRange(RedBlackTreeNode<TKey, TValue> node,
-            TKey minimum, TKey maximum)
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseLeftToRight(TKey minimum)
         {
+            var node = RootNode;
+
             var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
 
             while (node != null)
@@ -1016,6 +1037,118 @@ namespace RedBlackForest
                     }
                     else
                     {
+                        while (true)
+                        {
+                            yield return node;
+
+                            node = node.Right;
+
+                            if (node == null && stack.Count > 0)
+                            {
+                                node = stack.Pop();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    node = node.Right;
+
+                    if (node == null && stack.Count > 0)
+                    {
+                        node = stack.Pop();
+
+                        while (true)
+                        {
+                            yield return node;
+
+                            node = node.Right;
+
+                            if (node == null && stack.Count > 0)
+                            {
+                                node = stack.Pop();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseLeftToRight(TKey minimum, TKey maximum)
+        {
+            var node = RootNode;
+
+            var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
+
+            while (node != null)
+            {
+                var comparison = Comparer.Compare(minimum, node.Key);
+
+                if (comparison <= 0)
+                {
+                    if (node.Left != null)
+                    {
+                        stack.Push(node);
+                        node = node.Left;
+                    }
+                    else
+                    {
+                        var @break = false;
+
+                        while (true)
+                        {
+                            comparison = Comparer.Compare(node.Key, maximum);
+
+                            if (comparison < 0)
+                                // node.Key < maximum
+                            {
+                                yield return node;
+
+                                node = node.Right;
+
+                                if (node == null && stack.Count > 0)
+                                {
+                                    node = stack.Pop();
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            else if (comparison == 0)
+                                // node.Key == maximum
+                            {
+                                yield return node;
+
+                                @break = true;
+                                break;
+                            }
+                            else
+                                // node.Key > maximum
+                            {
+                                @break = true;
+                                break;
+                            }
+                        }
+
+                        if (@break) break;
+                    }
+                }
+                else
+                {
+                    node = node.Right;
+
+                    if (node == null && stack.Count > 0)
+                    {
+                        node = stack.Pop();
+
                         var @break = false;
 
                         while (true)
@@ -1054,25 +1187,183 @@ namespace RedBlackForest
                         if (@break) break;
                     }
                 }
+            }
+        }
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRightToLeft()
+        {
+            var node = RootNode;
+
+            var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
+
+            while (node != null)
+            {
+                if (node.Right != null)
+                {
+                    stack.Push(node);
+                    node = node.Right;
+                }
                 else
                 {
-                    node = node.Right;
+                    while (true)
+                    {
+                        yield return node;
+
+                        node = node.Left;
+
+                        if (node == null && stack.Count > 0)
+                        {
+                            node = stack.Pop();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRightToLeft(TKey maximum)
+        {
+            var node = RootNode;
+
+            var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
+
+            while (node != null)
+            {
+                var comparison = Comparer.Compare(maximum, node.Key);
+
+                if (comparison >= 0)
+                {
+                    if (node.Right != null)
+                    {
+                        stack.Push(node);
+                        node = node.Right;
+                    }
+                    else
+                    {
+                        while (true)
+                        {
+                            yield return node;
+
+                            node = node.Left;
+
+                            if (node == null && stack.Count > 0)
+                            {
+                                node = stack.Pop();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    node = node.Left;
 
                     if (node == null && stack.Count > 0)
                     {
                         node = stack.Pop();
 
-                        Boolean @break = false;
+                        while (true)
+                        {
+                            yield return node;
+
+                            node = node.Left;
+
+                            if (node == null && stack.Count > 0)
+                            {
+                                node = stack.Pop();
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private IEnumerable<RedBlackTreeNode<TKey, TValue>> TraverseRightToLeft(TKey minimum, TKey maximum)
+        {
+            var node = RootNode;
+
+            var stack = new Stack<RedBlackTreeNode<TKey, TValue>>();
+
+            while (node != null)
+            {
+                var comparison = Comparer.Compare(maximum, node.Key);
+
+                if (comparison >= 0)
+                {
+                    if (node.Right != null)
+                    {
+                        stack.Push(node);
+                        node = node.Right;
+                    }
+                    else
+                    {
+                        var @break = false;
 
                         while (true)
                         {
-                            comparison = Comparer.Compare(node.Key, maximum);
+                            comparison = Comparer.Compare(node.Key, minimum);
 
-                            if (comparison < 0)
+                            if (comparison > 0)
+                            // node.Key > minimum
                             {
                                 yield return node;
 
-                                node = node.Right;
+                                node = node.Left;
+
+                                if (node == null && stack.Count > 0)
+                                {
+                                    node = stack.Pop();
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            else if (comparison == 0)
+                            // node.Key == minimum
+                            {
+                                yield return node;
+
+                                @break = true;
+                                break;
+                            }
+                            else
+                            // node.Key < minimum
+                            {
+                                @break = true;
+                                break;
+                            }
+                        }
+
+                        if (@break) break;
+                    }
+                }
+                else
+                {
+                    node = node.Left;
+
+                    if (node == null && stack.Count > 0)
+                    {
+                        node = stack.Pop();
+
+                        var @break = false;
+
+                        while (true)
+                        {
+                            comparison = Comparer.Compare(node.Key, minimum);
+
+                            if (comparison > 0)
+                            {
+                                yield return node;
+
+                                node = node.Left;
 
                                 if (node == null && stack.Count > 0)
                                 {
@@ -1103,17 +1394,92 @@ namespace RedBlackForest
             }
         }
 
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromLeftToRight()
+        {
+            return TraverseLeftToRight().Select(x => x.KeyValuePair);
+        }
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromRightToLeft()
+        {
+            return TraverseRightToLeft().Select(x => x.KeyValuePair);
+        }
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromLeftToRight(TKey minimum)
+        {
+            return TraverseLeftToRight(minimum).Select(x => x.KeyValuePair);
+        }
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromRightToLeft(TKey maximum)
+        {
+            return TraverseRightToLeft(maximum).Select(x => x.KeyValuePair);
+        }
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromLeftToRight(TKey minimum, TKey maximum)
+        {
+            return TraverseLeftToRight(minimum, maximum).Select(x => x.KeyValuePair);
+        }
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseKeyValuePairsFromRightToLeft(TKey minimum, TKey maximum)
+        {
+            return TraverseRightToLeft(minimum, maximum).Select(x => x.KeyValuePair);
+        }
+
+        public IEnumerable<TKey> TraverseKeysFromLeftToRight()
+        {
+            return TraverseLeftToRight().Select(x => x.Key);
+        }
+        public IEnumerable<TKey> TraverseKeysFromRightToLeft()
+        {
+            return TraverseRightToLeft().Select(x => x.Key);
+        }
+        public IEnumerable<TKey> TraverseKeysFromLeftToRight(TKey minimum)
+        {
+            return TraverseLeftToRight(minimum).Select(x => x.Key);
+        }
+        public IEnumerable<TKey> TraverseKeysFromRightToLeft(TKey maximum)
+        {
+            return TraverseRightToLeft(maximum).Select(x => x.Key);
+        }
+        public IEnumerable<TKey> TraverseKeysFromLeftToRight(TKey minimum, TKey maximum)
+        {
+            return TraverseLeftToRight(minimum, maximum).Select(x => x.Key);
+        }
+        public IEnumerable<TKey> TraverseKeysFromRightToLeft(TKey minimum, TKey maximum)
+        {
+            return TraverseRightToLeft(minimum, maximum).Select(x => x.Key);
+        }
+
+        public IEnumerable<TValue> TraverseValuesFromLeftToRight()
+        {
+            return TraverseLeftToRight().Select(x => x.Value);
+        }
+        public IEnumerable<TValue> TraverseValuesFromRightToLeft()
+        {
+            return TraverseRightToLeft().Select(x => x.Value);
+        }
+        public IEnumerable<TValue> TraverseValuesFromLeftToRight(TKey minimum)
+        {
+            return TraverseLeftToRight(minimum).Select(x => x.Value);
+        }
+        public IEnumerable<TValue> TraverseValuesFromRightToLeft(TKey maximum)
+        {
+            return TraverseRightToLeft(maximum).Select(x => x.Value);
+        }
+        public IEnumerable<TValue> TraverseValuesFromLeftToRight(TKey minimum, TKey maximum)
+        {
+            return TraverseLeftToRight(minimum, maximum).Select(x => x.Value);
+        }
+        public IEnumerable<TValue> TraverseValuesFromRightToLeft(TKey minimum, TKey maximum)
+        {
+            return TraverseRightToLeft(minimum, maximum).Select(x => x.Value);
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Traverse(rootNode).GetEnumerator();
+            return TraverseLeftToRight().GetEnumerator();
         }
 
         public TValue Set(TKey key, TValue value)
         {
             RedBlackTreeNode<TKey, TValue> result;
 
-            rootNode = TryGetOrAddValue(rootNode, key, value, out result);
-            rootNode.IsBlack = true;
+            RootNode = TryGetOrAddValue(RootNode, key, value, out result);
+            RootNode.IsBlack = true;
 
             result.Value = value;
 
@@ -1124,8 +1490,17 @@ namespace RedBlackForest
         {
             RedBlackTreeNode<TKey, TValue> result;
 
-            rootNode = TryGetOrAddValue(rootNode, key, value, out result);
-            rootNode.IsBlack = true;
+            RootNode = TryGetOrAddValue(RootNode, key, value, out result);
+            RootNode.IsBlack = true;
+
+            return result.Value;
+        }
+        public TValue TryGetOrAddValue(TKey key, Func<TValue> value)
+        {
+            RedBlackTreeNode<TKey, TValue> result;
+
+            RootNode = TryGetOrAddValue(RootNode, key, value, out result);
+            RootNode.IsBlack = true;
 
             return result.Value;
         }
@@ -1137,7 +1512,7 @@ namespace RedBlackForest
                 // Insert new node
                 Count++;
 
-                return result = new RedBlackTreeNode<TKey, TValue> {Key = key, Value = value};
+                return result = new RedBlackTreeNode<TKey, TValue> { Key = key, Value = value };
             }
 
             if (IsRed(node.Left) && IsRed(node.Right))
@@ -1176,19 +1551,7 @@ namespace RedBlackForest
 
             return node;
         }
-
-        public TValue TryGetOrAddValue(TKey key, Func<TValue> value)
-        {
-            RedBlackTreeNode<TKey, TValue> result;
-
-            rootNode = TryGetOrAddValue(rootNode, key, value, out result);
-            rootNode.IsBlack = true;
-
-            return result.Value;
-        }
-
-        private RedBlackTreeNode<TKey, TValue> TryGetOrAddValue(RedBlackTreeNode<TKey, TValue> node, TKey key,
-            Func<TValue> value, out RedBlackTreeNode<TKey, TValue> result)
+        private RedBlackTreeNode<TKey, TValue> TryGetOrAddValue(RedBlackTreeNode<TKey, TValue> node, TKey key, Func<TValue> value, out RedBlackTreeNode<TKey, TValue> result)
         {
             if (node == null)
             {
