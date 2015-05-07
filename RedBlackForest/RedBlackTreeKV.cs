@@ -701,65 +701,6 @@ namespace RedBlackForest
             return TraverseLeftToRight().Select(x => x.KeyValuePair).GetEnumerator();
         }
 
-        public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateRange(TKey minimum, TKey maximum)
-        {
-            return TraverseLeftToRight(minimum, maximum).Select(x => x.KeyValuePair);
-        }
-
-        public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateDescending(TKey key)
-        {
-            var nearest = NearestNodes(key);
-
-            var prev = nearest.A;
-            var next = nearest.B;
-
-            if (prev != null)
-            {
-                if (prev == next)
-                {
-                    yield return prev.KeyValuePair;
-
-                    prev = SiblingNodes(prev.Key).A;
-                    next = SiblingNodes(next.Key).B;
-                }
-            }
-
-            var takePrev = false;
-
-            while (prev != null && next != null)
-            {
-                if (takePrev)
-                {
-                    yield return prev.KeyValuePair;
-
-                    prev = SiblingNodes(prev.Key).A;
-                }
-                else
-                {
-                    yield return next.KeyValuePair;
-
-                    next = SiblingNodes(next.Key).B;
-                }
-
-                takePrev = !takePrev;
-            }
-
-            while (prev != null)
-            {
-                yield return prev.KeyValuePair;
-
-                prev = SiblingNodes(prev.Key).A;
-            }
-
-            while (next != null)
-            {
-                yield return next.KeyValuePair;
-
-                next = SiblingNodes(next.Key).B;
-            }
-
-        }
-
         private RedBlackTreeNode<TKey, TValue> Add(RedBlackTreeNode<TKey, TValue> node, TKey key, TValue value, out RedBlackTreeNode<TKey, TValue> result)
         {
             if (node == null)
